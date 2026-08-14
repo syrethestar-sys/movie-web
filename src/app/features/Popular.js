@@ -1,78 +1,67 @@
+"use client";
+import { useEffect, useState } from "react";
 import { MovieTitles } from "../components/MovieTitles";
 import { SeeMoreArrow } from "../icons/SeeMoreArrow";
+import { useRouter } from "next/navigation";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
+import { MovieGridSkeleton } from "../components/skeletons/MovieGridSkeleton";
+const api_token =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
 
 export const Popular = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [dark, setDark] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter()
+
+  const getData = async () => {
+    const response = await fetch(
+      "https://api.themoviedb.org/3/movie/popular?language=en-US&page=1",
+      { headers: { Authorization: `Bearer ${api_token}` } },
+    );
+    const jsonData = await response.json();
+    return jsonData.results;
+  };
+  useEffect(() => {
+    getData()
+      .then((data) => setData(data))
+      .catch(() => setErrorMessage("MOVE API ERROR"))
+      .finally(() => setLoading(false));
+  }, []);
+  const dataSliced = data.slice(0, 10);
+  const handleSeeMore = () => {
+    router.push(`/Popular`)
+  }
   return (
-    <div className="w-359.25 h-244.5 flex flex-col items-center gap-8">
-            <div className="w-319.25 h-9 text-black flex items-center justify-between">
-              <p className="font-medium text-[24px]">Popular</p>
-              <button className="flex items-center gap-2 text-[14px] font-light cursor-pointer">
-                See more
-                <SeeMoreArrow />
-              </button>
-            </div>
-            <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
-              <MovieTitles
-                src="/Terminator2JudgmentDay.png"
-                rating="6.9"
-                alt="First Movie"
-                title="Terminator 2 judgment day"
-              />
-              <MovieTitles
-                src="/CityOfGod.png"
-                rating="6.9"
-                alt="Second Movie"
-                title="City of god"
-              />
-              <MovieTitles
-                src="/Interstellar.png"
-                rating="6.9"
-                alt="First Movie"
-                title="Interstellar"
-              />
-              <MovieTitles
-                src="/ItsAWonderfulLife.png"
-                rating="6.9"
-                alt="First Movie"
-                title="It's a wonderful life"
-              />
-              <MovieTitles
-                src="/SavingPrivateRyan.png"
-                rating="6.9"
-                alt="First Movie"
-                title="Saving private ryan"
-              />
-              <MovieTitles
-                src="/Seven.png"
-                rating="6.9"
-                alt="First Movie"
-                title="Seven"
-              />
-              <MovieTitles
-                src="/SevenSamurai.png"
-                rating="6.9"
-                alt="First Movie"
-                title="Seven samurai"
-              />
-              <MovieTitles
-                src="/TheGreenMile.png"
-                rating="6.9"
-                alt="First Movie"
-                title="The green mile"
-              />
-              <MovieTitles
-                src="/TheSilenceOfTheLambs.png"
-                rating="6.9"
-                alt="First Movie"
-                title="The silence of the lambs"
-              />
-              <MovieTitles
-                src="/LifeIsBeautiful.png"
-                rating="6.9"
-                alt="First Movie"
-                title="Life is Beautiful"
-              />
-            </div>
+    <div className="">
+      {loading && <MovieGridSkeleton />}
+      {!loading && errorMessage && <div>{errorMessage}</div>}
+      {!loading && !errorMessage && (
+        <div className="w-359.25 h-244.5 flex flex-col items-center gap-8">
+          <div className="w-319.25 h-9 text-black flex items-center justify-between">
+            <p className="font-medium text-[24px]">Popular</p>
+            <button onClick={handleSeeMore}
+            className="flex items-center gap-2 text-[14px] font-light cursor-pointer">
+              See more
+              <SeeMoreArrow />
+            </button>
           </div>
+          <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
+            {dataSliced.map((movie) => (
+              <MovieTitles
+                key={movie.id}
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                rating={movie.vote_average.toFixed(1)}
+                alt={movie.title}
+                title={movie.title}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+      
+    </div>
   );
 };

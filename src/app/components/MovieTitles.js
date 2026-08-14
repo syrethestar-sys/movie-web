@@ -4,7 +4,7 @@ import Image from "next/image";
 export const MovieTitles = (props) => {
   const { src, rating, title, alt } = props;
   return (
-    <div className="w-[229.73px] h-109.75 bg-[#F4F4F5] rounded-xl flex flex-col gap-1">
+    <div className="w-[229.73px] h-109.75 bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer">
       <div className="relative w-full h-85">
         <Image
           src={src}

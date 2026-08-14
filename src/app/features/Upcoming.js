@@ -1,78 +1,70 @@
+"use client";
+import { useEffect, useState } from "react";
 import { MovieTitles } from "../components/MovieTitles";
 import { SeeMoreArrow } from "../icons/SeeMoreArrow";
+import { resolve } from "styled-jsx/css";
+import { useRouter } from "next/navigation";
+import { MovieGridSkeleton } from "../components/skeletons/MovieGridSkeleton";
 
+const api_token =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
 export const Upcoming = () => {
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [dark, setDark] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const router = useRouter()
+
+  const getData = async () => {
+    const response = await fetch(
+      "https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1",
+      { headers: { Authorization: `Bearer ${api_token}` } },
+    );
+    const jsonData = await response.json();
+    return jsonData.results;
+  };
+  useEffect(() => {
+    getData()
+      .then((data) => setData(data))
+      .catch(() => setErrorMessage("MOVE API ERROR"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const dataSliced = data.slice(0, 10);
+  const handleSeeMore = () => {
+    router.push(`/Upcoming`);
+    console.log("im see more");
+    
+  };
+
   return (
-    <div className="w-359.25 h-244.5 flex flex-col items-center gap-8">
-            <div className="w-319.25 h-9 text-black flex items-center justify-between">
-              <p className="font-medium text-[24px]">Upcoming</p>
-              <button className="flex items-center gap-2 text-[14px] font-light cursor-pointer">
-                See more
-                <SeeMoreArrow />
-              </button>
-            </div>
-            <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
-              <MovieTitles
-                src="/DearSanta.jpg"
-                rating="6.9"
-                alt="First Movie"
-                title="Dear Santa"
-              />
-              <MovieTitles
-                src="/Dragon.jpg"
-                rating="6.9"
-                alt="Second Movie"
-                title="How To Train Your Dragon Live Action"
-              />
-              <MovieTitles
-                src="/AlienRomulus.jpg"
-                rating="6.9"
-                alt="Third"
-                title="Alien Romulus"
-              />
-              <MovieTitles
-                src="/FromTheAshes.jpg"
-                rating="6.9"
-                alt="Fourth Movie"
-                title="From the Ashes"
-              />
-              <MovieTitles
-                src="/SpaceDogg.jpg"
-                rating="6.9"
-                alt="Fifth Movie"
-                title="Space Dogg"
-              />
-              <MovieTitles
-                src="/TheOrder.jpg"
-                rating="6.9"
-                alt="Sixth Movie"
-                title="The Order"
-              />
-              <MovieTitles
-                src="/Y2K.jpg"
-                rating="6.9"
-                alt="Seventh Movie"
-                title="Y2K"
-              />
-              <MovieTitles
-                src="/SoloLeveling.jpg"
-                rating="6.9"
-                alt="Eighth Movie"
-                title="Solo leveling: ReAwakening"
-              />
-              <MovieTitles
-                src="/GetAwayy.jpg"
-                rating="6.9"
-                alt="Nineth Movie"
-                title="Get Away"
-              />
-              <MovieTitles
-                src="/SonicTheHedgehog3.png"
-                rating="6.9"
-                alt="Tenth Movie"
-                title="Sonic the Hedgehog 3"
-              />
-            </div>
+    <div>
+      {loading && <MovieGridSkeleton />}
+      {!loading && errorMessage && <div>{errorMessage}</div>}
+      {!loading && !errorMessage && (
+        <div className="w-359.25 h-244.5 flex flex-col items-center gap-8">
+          <div className="w-319.25 h-9 text-black flex items-center justify-between">
+            <p className="font-medium text-[24px]">Upcoming</p>
+            <button 
+            onClick={handleSeeMore}
+            className="flex items-center gap-2 text-[14px] font-light cursor-pointer">
+              See more
+              <SeeMoreArrow />
+            </button>
           </div>
+          <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
+            {dataSliced.map((movie) => (
+              <MovieTitles
+                key={movie.id}
+                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                rating={movie.vote_average.toFixed(1)}
+                alt={movie.title}
+                title={movie.title}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 };

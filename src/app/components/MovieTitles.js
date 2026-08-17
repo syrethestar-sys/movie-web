@@ -1,15 +1,23 @@
+import { useRouter } from "next/navigation";
 import { MovieRatingStar } from "../icons/MovieRatingStar";
 import Image from "next/image";
 
 export const MovieTitles = (props) => {
-  const { src, rating, title, alt } = props;
+  const router = useRouter()
+  const { src, rating, title, alt, id} = props;
+  const handleDetailClick = () => {
+    router.push(`/detail/${id}`);
+  };
+
   return (
-    <div className="w-[229.73px] h-109.75 bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer">
+    <div onClick={handleDetailClick}
+    className="w-[229.73px] h-109.75 bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer">
       <div className="relative w-full h-85">
         <Image
           src={src}
           alt={alt}
           fill
+          sizes="230px"
           className="object-cover rounded-t-[10px]"
         />
       </div>

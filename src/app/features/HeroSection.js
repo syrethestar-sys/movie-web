@@ -59,6 +59,7 @@ export const HeroSection = () => {
         }
         alt={activeMovie.title}
         fill
+        sizes="100vw"
         className="object-cover absolute z-10 scale-150 cursor-pointer"
         priority
       />
@@ -69,7 +70,7 @@ export const HeroSection = () => {
           <p className="font-sans font-normal text-base text-white h-6">
             Now Playing:
           </p>
-          <p className="font-sans font-bold text-[36px] text-white h-10 truncate">
+          <p className="font-sans font-bold text-[36px] text-white h-15 w-150">
             {activeMovie.title}
           </p>
           <div className="w-21 h-12 flex flex-row justify-center items-center gap-1">

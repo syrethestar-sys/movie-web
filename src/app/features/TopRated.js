@@ -51,6 +51,7 @@ export const TopRated = () => {
             {data.slice(0,10).map((movie) => (
               <MovieTitles
                 key={movie.id}
+                id={movie.id}
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 rating={movie.vote_average.toFixed(1)}
                 alt={movie.title}

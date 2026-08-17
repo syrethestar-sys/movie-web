@@ -33,8 +33,6 @@ export const Upcoming = () => {
   const dataSliced = data.slice(0, 10);
   const handleSeeMore = () => {
     router.push(`/Upcoming`);
-    console.log("im see more");
-    
   };
 
   return (
@@ -56,6 +54,7 @@ export const Upcoming = () => {
             {dataSliced.map((movie) => (
               <MovieTitles
                 key={movie.id}
+                id = {movie.id}
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
                 rating={movie.vote_average.toFixed(1)}
                 alt={movie.title}

@@ -1,17 +1,30 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { SeeMoreArrow } from "../icons/SeeMoreArrow";
-import { MovieTitles } from "../components/MovieTitles";
-import { Header } from "../features/Header";
+import { Suspense, useEffect, useState } from "react";
+import { MovieTitlesFluid } from "../components/MovieTitlesFluid";
+import { MovieCardSkeletonFluid } from "../components/skeletons/MovieCardSkeletonFluid";
 import { Footer } from "../features/Footer";
+import { MovieTitles } from "../components/MovieTitles";
+import { SeeMoreArrow } from "../icons/SeeMoreArrow";
 import { MovieGridSkeleton } from "../components/skeletons/MovieGridSkeleton";
+import { Header } from "../features/Header";
 import { Pagination } from "../components/Pagination";
+import { useSearchParams } from "next/navigation";
 
 const api_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
 
-export default function Popular() {
+export default function MoreLikeThisPage() {
+  return (
+    <Suspense fallback={<MovieGridSkeleton />}>
+      <MoreLikeThis />
+    </Suspense>
+  );
+}
+
+function MoreLikeThis() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [dark, setDark] = useState("");
@@ -21,13 +34,14 @@ export default function Popular() {
 
   const getData = async () => {
     const response = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?language=en-US&page=${page}`,
+      `https://api.themoviedb.org/3/movie/${id}/similar?language=en-US&page=${page}`,
       { headers: { Authorization: `Bearer ${api_token}` } },
     );
     const jsonData = await response.json();
     return jsonData;
   };
   useEffect(() => {
+    if (!id) return;
     (async () => {
       setLoading(true);
       try {
@@ -40,7 +54,7 @@ export default function Popular() {
         setLoading(false);
       }
     })();
-  }, [page]);
+  }, [id, page]);
 
   const handlePageChange = (newPage) => {
     if (newPage < 1 || newPage > totalPages) return;
@@ -49,6 +63,7 @@ export default function Popular() {
   };
 
   const dataSliced = data.slice(0, 10);
+
   return (
     <div>
       <div className="mb-8">
@@ -60,7 +75,7 @@ export default function Popular() {
       {!loading && !errorMessage && (
         <div className="w-359.25 h-244.5 flex flex-col items-center gap-8 mb-13">
           <div className="w-319.25 h-9 text-black flex items-center justify-between">
-            <p className="font-medium text-[24px]">Popular</p>
+            <p className="font-medium text-[24px]">More like this</p>
           </div>
           <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
             {dataSliced.map((movie) => (

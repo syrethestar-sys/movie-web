@@ -14,7 +14,7 @@ export const MovieTitlesFluid = (props) => {
       onClick={handleDetailClick}
       className="w-full bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer"
     >
-      <div className="relative w-full aspect-[2/3]">
+      <div className="relative w-full aspect-2/3">
         <Image
           src={src}
           alt={alt}
@@ -23,8 +23,8 @@ export const MovieTitlesFluid = (props) => {
           className="object-cover rounded-t-[10px]"
         />
       </div>
-      <div className="w-full bg-[#F4F4F5] rounded-b-[10px] p-2 flex flex-col justify-center items-center gap-1">
-        <div className="w-full flex items-center justify-center gap-1">
+      <div className="h-23.75 bg-[#F4F4F5] rounded-b-[10px] p-2 flex flex-col gap-1 cursor-pointer">
+        <div className="w-full flex items-center gap-1">
           <div className="w-4 h-4.5 shrink-0">
             <MovieRatingStar />
           </div>
@@ -35,7 +35,7 @@ export const MovieTitlesFluid = (props) => {
             </span>
           </div>
         </div>
-        <p className="w-full text-lg leading-7 font-light text-center truncate">
+        <p className="w-full text-lg leading-7 font-light truncate">
           {title}
         </p>
       </div>

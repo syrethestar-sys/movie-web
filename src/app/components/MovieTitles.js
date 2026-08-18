@@ -21,7 +21,7 @@ export const MovieTitles = (props) => {
           className="object-cover rounded-t-[10px]"
         />
       </div>
-      <div className="w-[229.73] h-23.75 bg-[#F4F4F5] rounded-b-[10px] p-2 flex flex-col justify-center items-center">
+      <div className="w-[229.73px] h-23.75 bg-[#F4F4F5] rounded-b-[10px] p-2 flex flex-col justify-center items-center">
         <div className="flex items-center gap-1">
           <div className="w-4 h-4.5">
             <MovieRatingStar />

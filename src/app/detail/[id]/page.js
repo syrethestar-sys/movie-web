@@ -9,6 +9,7 @@ import { MovieTrailerArrow } from "../../icons/MovieTrailerArrow";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import MoreLikeThis from "../../features/MoreLikeThis";
+import { DetailSkeleton } from "@/app/components/skeletons/DetailSkeleton";
 
 const api_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
@@ -17,7 +18,7 @@ export default function Detail() {
   const [isPlaying, setIsPlaying] = useState(false);
   const { id } = useParams();
   const router = useRouter();
-
+  const [trailer, setTrailer] = useState([]);
   const [movie, setMovie] = useState(null);
   const [cast, setCast] = useState([]);
   const [crew, setCrew] = useState([]);
@@ -28,20 +29,40 @@ export default function Detail() {
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
-        { headers: { Authorization: `Bearer ${api_token}` } }
+        { headers: { Authorization: `Bearer ${api_token}` } },
       );
       return await response.json();
     } catch (error) {
       console.error("Movie detail error:", error);
     }
   };
+  const getTrailer = async () => {
+    if (!id) return;
+    const response = await fetch(
+      `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`,
+      { headers: { Authorization: `Bearer ${api_token}` } },
+    );
+    const jsonData = await response.json();
+    return jsonData.results;
+  };
 
+  useEffect(() => {
+    if (!id) return;
+    getTrailer()
+      .then((data) => setTrailer(data))
+      .catch(() => setErrorMessage("MOVIE API ERROR"));
+  }, [id]);
+
+  const officialTrailer = trailer?.find(
+    (video) => video.site === "YouTube" && video.type === "Trailer",
+  );
+  const youtubeKey = officialTrailer?.key || trailer?.[0]?.key;
 
   const getCredits = async (movieId) => {
     try {
       const response = await fetch(
         `https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US`,
-        { headers: { Authorization: `Bearer ${api_token}` } }
+        { headers: { Authorization: `Bearer ${api_token}` } },
       );
       return await response.json();
     } catch (error) {
@@ -53,15 +74,15 @@ export default function Detail() {
   useEffect(() => {
     if (!id) return;
 
-    Promise.all([getMovieDetails(id), getCredits(id)])
-      .then(([movieData, creditsData]) => {
+    Promise.all([getMovieDetails(id), getCredits(id)]).then(
+      ([movieData, creditsData]) => {
         setMovie(movieData);
         setCast(creditsData.cast || []);
         setCrew(creditsData.crew || []);
-      });
+      },
+    );
   }, [id]);
 
- 
   const directors = crew
     .filter((person) => person.job === "Director")
     .map((d) => d.name)
@@ -74,11 +95,7 @@ export default function Detail() {
     .join(" · ");
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        Уншиж байна...
-      </div>
-    );
+    return <DetailSkeleton />;
   }
 
   return (
@@ -98,18 +115,22 @@ export default function Detail() {
           </div>
           <div>
             <p className="text-xs text-[#09090B]">Rating</p>
-            <div className="flex items-center gap-1">
-              <MovieStar />
-              <div className="flex flex-col">
-                <div className="flex items-end">
-                  <span className="text-lg font-normal">
-                    {movie?.vote_average ? movie.vote_average.toFixed(1) : "0.0"}
-                  </span>
-                  <span className="text-xs text-[#71717A]">/10</span>
+            <div className="flex flex-col">
+              <div className="flex items-center gap-1">
+                <MovieStar />
+                <div className="flex flex-col items-center">
+                  <div className="flex flex-row items-center">
+                    <p className="text-lg font-normal">
+                      {movie?.vote_average
+                        ? movie.vote_average.toFixed(1)
+                        : "0.0"}
+                    </p>
+                    <p className="text-xs text-[#71717A]">/10</p>
+                  </div>
+                  <p className="text-[#71717A] text-xs">
+                    {movie?.vote_count}
+                  </p>
                 </div>
-                <span className="text-[#71717A] text-xs">
-                  {movie?.vote_count}
-                </span>
               </div>
             </div>
           </div>
@@ -118,7 +139,7 @@ export default function Detail() {
         {/* Pictures & Banner Container */}
         <div className="flex flex-col md:flex-row justify-between gap-8">
           {/* Vertical Poster */}
-          <div className="relative w-full md:w-72 h-[430px] rounded-xl overflow-hidden shrink-0">
+          <div className="relative w-full md:w-72 h-107.5 rounded-xl overflow-hidden shrink-0">
             {movie?.poster_path && (
               <Image
                 src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
@@ -131,7 +152,7 @@ export default function Detail() {
           </div>
 
           {/* Horizontal Cover Banner */}
-          <div className="relative w-full flex-1 h-[430px] rounded-xl overflow-hidden bg-black flex items-center justify-center">
+          <div className="relative w-full flex-1 h-107.5 rounded-xl overflow-hidden bg-black flex items-center justify-center">
             {movie?.backdrop_path && (
               <Image
                 src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
@@ -164,15 +185,15 @@ export default function Detail() {
           <div className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
             <button
               onClick={() => setIsPlaying(false)}
-              className="absolute top-4 right-4 bg-black/70 hover:bg-black text-white px-3 py-1.5 text-xs rounded-full z-50 cursor-pointer border border-white/20 transition-all flex items-center gap-1"
+              className="absolute top-10 right-4 bg-black/70 hover:bg-black text-white px-3 py-1.5 text-xs rounded-full z-50 cursor-pointer border border-white/20 transition-all flex items-center gap-1"
             >
-              ✕ Хаах
+              ✕
             </button>
 
             {/* YouTube Iframe */}
             <iframe
               className="w-full h-full"
-              src="https://www.youtube.com/embed/hDZ7y8RP5HE?autoplay=1&rel=0"
+              src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&rel=0`}
               title="Movie Trailer"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -234,7 +255,7 @@ export default function Detail() {
       <div className="flex items-center justify-between h-9 text-black max-w-6xl w-full px-4 mb-6">
         <p className="font-medium text-2xl">More Like this</p>
         <button
-          onClick={() => router.push("/Upcoming")}
+          onClick={() => router.push(`/MoreLikeThis?id=${id}`)}
           className="flex items-center gap-2 text-sm font-light cursor-pointer hover:opacity-80 transition-opacity"
         >
           See more

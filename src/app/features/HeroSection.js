@@ -12,6 +12,7 @@ const api_token =
 
 export const HeroSection = () => {
   const [data, setData] = useState([]);
+
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -25,15 +26,15 @@ export const HeroSection = () => {
     const jsonData = await response.json();
     return jsonData.results;
   };
-
+  
   useEffect(() => {
     getData()
       .then((data) => setData(data))
       .catch(() => setErrorMessage("MOVIE API ERROR"))
       .finally(() => setLoading(false));
   }, []);
-
-  const slides = data.slice(0, 3);
+  
+  const slides = data.slice(0, 6);
   const activeMovie = slides[activeIndex];
 
   const handleDetailClick = () => {

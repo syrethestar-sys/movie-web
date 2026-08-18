@@ -13,7 +13,7 @@ export const Header = () => {
   const toggleGenre = () => {
     setIsOpen((prev) => !prev);
   };
-
+  
   return (
     <header className="relative w-full h-14.75 bg-white flex items-center justify-center">
       <div className="max-w-7xl w-full h-9 flex items-center justify-between">

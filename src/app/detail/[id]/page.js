@@ -152,14 +152,14 @@ export default function Detail() {
           </div>
 
           {/* Horizontal Cover Banner */}
-          <div className="relative w-full flex-1 h-107.5 rounded-xl overflow-hidden bg-black flex items-center justify-center">
+          <div className="group relative w-full flex-1 h-107.5 rounded-xl overflow-hidden bg-black flex items-center justify-center">
             {movie?.backdrop_path && (
               <Image
                 src={`https://image.tmdb.org/t/p/w1280${movie.backdrop_path}`}
                 alt="horizontal poster"
                 fill
                 sizes="(min-width: 768px) 800px, 100vw"
-                className="object-cover brightness-75 z-0"
+                className="object-cover z-0 brightness-75 transition-all duration-300 ease-out group-hover:scale-110 group-hover:brightness-100"
               />
             )}
             <div className="absolute z-10 left-6 bottom-6 flex items-center gap-3 text-white">

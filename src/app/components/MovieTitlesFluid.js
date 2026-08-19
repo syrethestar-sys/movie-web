@@ -12,15 +12,15 @@ export const MovieTitlesFluid = (props) => {
   return (
     <div
       onClick={handleDetailClick}
-      className="w-full bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer"
+      className="group w-full bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer"
     >
-      <div className="relative w-full aspect-2/3">
+      <div className="relative w-full aspect-2/3 overflow-hidden rounded-t-[10px]">
         <Image
           src={src}
           alt={alt}
           fill
           sizes="(min-width: 1152px) 210px, 20vw"
-          className="object-cover rounded-t-[10px]"
+          className="object-cover transition-all duration-300 ease-out group-hover:scale-110 group-hover:brightness-75"
         />
       </div>
       <div className="h-23.75 bg-[#F4F4F5] rounded-b-[10px] p-2 flex flex-col gap-1 cursor-pointer">

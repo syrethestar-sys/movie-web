@@ -128,7 +128,7 @@ export const HeroSection = () => {
 
   return (
     <div
-      className={`relative w-full h-150 overflow-hidden group select-none ${
+      className={`relative w-full h-190 overflow-hidden group select-none ${
         isDragging ? "cursor-grabbing" : "cursor-grab"
       }`}
       onMouseEnter={() => setIsHovering(true)}
@@ -146,7 +146,7 @@ export const HeroSection = () => {
           fill
           sizes="100vw"
           draggable={false}
-          className="object-cover absolute inset-0 z-10 scale-150 cursor-pointer"
+          className="object-cover absolute inset-0 z-10 scale-150 brightness-75 cursor-pointer"
           priority
         />
       )}
@@ -161,32 +161,40 @@ export const HeroSection = () => {
           sizes="100vw"
           draggable={false}
           style={{ opacity: fadeIn ? 1 : 0 }}
-          className="object-cover absolute inset-0 z-11 scale-150 cursor-pointer transition-opacity duration-700 ease-in-out"
+          className="object-cover absolute inset-0 z-11 scale-150 brightness-75 cursor-pointer transition-opacity duration-700 ease-in-out"
           priority
         />
       )}
+      {/* vignette: darkens the edges and the left side so the text pops */}
+      <div
+        className="absolute inset-0 z-15 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 35%, rgba(0,0,0,0.1) 60%, rgba(0,0,0,0.3) 100%), radial-gradient(ellipse at center, rgba(0,0,0,0) 45%, rgba(0,0,0,0.45) 100%)",
+        }}
+      />
 
       {/* Texts */}
-      <div className="absolute z-20 w-101 h-66 flex flex-col gap-4 left-35 top-44.5">
-        <div className="">
-          <p className="font-sans font-normal text-base text-white h-6">
+      <div className="absolute z-20 w-140 flex flex-col gap-6 left-72 top-1/2 -translate-y-1/2">
+        <div className="flex flex-col gap-1.5">
+          <p className="font-sans font-normal text-xl text-white">
             Now Playing:
           </p>
-          <p className="font-sans font-bold text-[36px] text-white h-15 w-150">
+          <p className="font-sans font-bold text-[64px] leading-[1.05] text-white w-180">
             {activeMovie.title}
           </p>
-          <div className="w-21 h-12 flex flex-row justify-center items-center gap-1">
+          <div className="h-14 flex flex-row items-center gap-2 mt-1">
             <MovieStar />
-            <p className="text-white text-[18px] font-semibold">
+            <p className="text-white text-2xl font-semibold">
               {activeMovie.vote_average.toFixed(1)}
             </p>
-            <span className="text-[#71717A] text-[16px]">/10</span>
+            <span className="text-[#71717A] text-xl">/10</span>
           </div>
         </div>
-        <div className="text-[#FAFAFA] text-[12px] font-sans font-extralight leading-4 w-75.5 line-clamp-4">
+        <div className="text-[#FAFAFA] text-base font-sans font-extralight leading-6 w-100 line-clamp-4">
           {activeMovie.overview}
         </div>
-        <button className="w-36.25 h-10 bg-white rounded-lg flex justify-center items-center gap-2 cursor-pointer">
+        <button className="w-52 h-13 bg-white rounded-lg flex justify-center items-center gap-2 cursor-pointer text-base font-medium">
           <MovieTrailerArrow />
           <p>Watch Trailer</p>
         </button>

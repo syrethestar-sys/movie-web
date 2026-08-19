@@ -11,14 +11,14 @@ export const MovieTitles = (props) => {
 
   return (
     <div onClick={handleDetailClick}
-    className="w-[229.73px] h-109.75 bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer">
-      <div className="relative w-full h-85">
+    className="group w-[229.73px] h-109.75 bg-[#F4F4F5] rounded-xl flex flex-col gap-1 cursor-pointer">
+      <div className="relative w-full h-85 overflow-hidden rounded-t-[10px]">
         <Image
           src={src}
           alt={alt}
           fill
           sizes="230px"
-          className="object-cover rounded-t-[10px]"
+          className="object-cover transition-all duration-300 ease-out group-hover:scale-110 group-hover:brightness-75"
         />
       </div>
       <div className="w-[229.73px] h-23.75 bg-[#F4F4F5] rounded-b-[10px] p-2 flex flex-col justify-center items-center">

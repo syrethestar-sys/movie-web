@@ -13,9 +13,14 @@ export const SearchMovieTitles = (props) => {
   };
   const cleanDate = date.slice(0,4)
   return (
-    <div className="h-[115px] p-2 flex gap-4 border-b-1 border-[#E4E4E7] box-border">
-      <div className="relative w-[67px] h-[100px]">
-        <Image src={src} alt={alt} fill className="object-cover rounded" />
+    <div className="group h-[115px] p-2 flex gap-4 border-b-1 border-[#E4E4E7] box-border">
+      <div className="relative w-[67px] h-[100px] overflow-hidden rounded">
+        <Image
+          src={src}
+          alt={alt}
+          fill
+          className="object-cover transition-all duration-300 ease-out group-hover:scale-110 group-hover:brightness-75"
+        />
       </div>
       <div className="w-[454px] flex flex-col justify-between ">
         <div className="">

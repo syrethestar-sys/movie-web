@@ -2,7 +2,7 @@ import { Skeleton } from "./Skeleton";
 
 export const HeroSectionSkeleton = () => {
   return (
-    <div className="relative w-full h-150 overflow-hidden bg-[#F4F4F5]">
+    <div className="relative w-full h-190 overflow-hidden bg-[#F4F4F5]">
       <Skeleton className="absolute inset-0 bg-[#E4E4E7] rounded-none" />
       <div className="absolute z-20 w-101 h-66 flex flex-col gap-4 left-35 top-44.5">
         <div className="flex flex-col gap-2">

@@ -53,28 +53,35 @@ export default function TopRated() {
       <div className="mb-8">
         <Header />
       </div>
-      {loading && <MovieGridSkeleton />}
-      {!loading && errorMessage && <div>{errorMessage}</div>}
-      {!loading && !errorMessage && (
-        <div className="w-359.25 h-244.5 flex flex-col items-center gap-8 mb-13">
-          <div className="w-319.25 h-9 text-black flex items-center justify-between">
-            <p className="font-medium text-[24px]">Top Rated</p>
+      <div className=" flex flex-col items-center">
+        {loading && <MovieGridSkeleton />}
+        {!loading && errorMessage && <div>{errorMessage}</div>}
+        {!loading && !errorMessage && (
+          <div className="w-359.25 h-244.5 flex flex-col items-center gap-8 mb-13">
+            <div className="w-319.25 h-9 text-black flex items-center justify-between">
+              <p className="font-medium text-[24px]">Top Rated</p>
+            </div>
+            <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
+              {data?.slice(0, 10).map((movie) => (
+                <MovieTitles
+                  key={movie.id}
+                  id={movie.id}
+                  src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                  rating={movie.vote_average.toFixed(1)}
+                  alt={movie.title}
+                  title={movie.title}
+                />
+              ))}
+            </div>
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
-          <div className="w-319.25 h-227.5 gap-8 grid grid-cols-5">
-            {data?.slice(0, 10).map((movie) => (
-              <MovieTitles
-                key={movie.id}
-                id={movie.id}
-                src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                rating={movie.vote_average.toFixed(1)}
-                alt={movie.title}
-                title={movie.title}
-              />
-            ))}
-          </div>
-          <Pagination page={page} totalPages={totalPages} onPageChange={handlePageChange} />
-        </div>
-      )}
+        )}
+      </div>
+
       <div className="mt-25">
         <Footer />
       </div>

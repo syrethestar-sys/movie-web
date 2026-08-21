@@ -1,9 +1,9 @@
-import { Footer } from "./features/Footer";
-import { Header } from "./features/Header";
-import { HeroSection } from "./features/HeroSection";
-import { Popular } from "./features/Popular";
-import { TopRated } from "./features/TopRated";
-import { Upcoming } from "./features/Upcoming";
+import { Footer } from "./features/global/Footer";
+import { Header } from "./features/global/Header";
+import { HeroSection } from "./features/home/HeroSection";
+import { Popular } from "./features/home/Popular";
+import { TopRated } from "./features/home/TopRated";
+import { Upcoming } from "./features/home/Upcoming";
 
 export default function Home() {
   return (

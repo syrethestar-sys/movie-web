@@ -8,7 +8,7 @@ export const MovieTrailerArrow = (props) => (
     {...props}
   >
     <path
-      stroke="#18181B"
+      stroke="white"
       strokeLinecap="round"
       strokeLinejoin="round"
       d="m.5.5 9.333 6-9.333 6V.5Z"

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GenresButton } from "../components/GenresButton";
+import { GenresButton } from "../../components/GenresButton";
 import { useRouter } from "next/navigation";
 
 const api_token =

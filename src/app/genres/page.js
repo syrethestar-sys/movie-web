@@ -3,8 +3,8 @@
 import { GenresButton } from "@/app/components/GenresButton";
 import { MovieTitlesFluid } from "@/app/components/MovieTitlesFluid";
 import { Pagination } from "@/app/components/Pagination";
-import { Footer } from "@/app/features/Footer";
-import { Header } from "@/app/features/Header";
+import { Footer } from "@/app/features/global/Footer";
+import { Header } from "@/app/features/global/Header";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 

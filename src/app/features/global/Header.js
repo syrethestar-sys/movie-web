@@ -1,19 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Logo } from "../icons/Logo";
-import { Moon } from "../icons/Moon";
-import { GenreDownArrow } from "../icons/GenreDownArrow";
-import { MagnifiyingGlass } from "../icons/MagnifiyingGlass";
+import { Logo } from "../../icons/Logo";
+import { GenreDownArrow } from "../../icons/GenreDownArrow";
+import { MagnifiyingGlass } from "../../icons/MagnifiyingGlass";
 import { Genres } from "./Genres";
-import Link from "next/link";
 import { Search } from "./Search";
+import { ThemeToggle } from "./ThemeToggle";
+import { useRouter } from "next/navigation";
 
 export const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
-
+  const router = useRouter("");
+  const [query, setQuery] = useState("");
   const genreRef = useRef(null);
   const searchRef = useRef(null);
 
@@ -36,9 +37,13 @@ export const Header = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" && query.trim()) {
+      router.push(`/Search?q=${encodeURIComponent(query.trim())}`);
+    }
+  };
   return (
-    <header className="relative w-full h-14.75 bg-white flex items-center justify-center">
+    <header className="relative w-full h-14.75 bg-white dark:bg-zinc-950 transition-colors duration-500 flex items-center justify-center">
       <div className="max-w-7xl w-full h-9 flex items-center justify-between">
         <Logo className="w-23 h-5 cursor-pointer" />
 
@@ -46,7 +51,7 @@ export const Header = () => {
           <div ref={genreRef}>
             <button
               onClick={toggleGenre}
-              className="w-24.25 h-9 border border-[#E4E4E7] rounded-lg flex justify-center items-center gap-2 text-sm shadow-sm cursor-pointer"
+              className="w-24.25 h-9 border border-[#E4E4E7] dark:border-zinc-700 dark:text-zinc-100 rounded-lg flex justify-center items-center gap-2 text-sm shadow-sm cursor-pointer transition-colors duration-500"
             >
               <GenreDownArrow
                 className={`transition-transform duration-200 ease-out ${
@@ -62,24 +67,24 @@ export const Header = () => {
             <div className="relative">
               <MagnifiyingGlass className="absolute w-4 h-4 left-3 top-2.5 cursor-pointer" />
               <input
-                onChange={(event) => {
-                  setValue(event.target.value);
+                onChange={(e) => {
+                  setValue(e.target.value);
+                  setQuery(e.target.value);
                   openSearch();
                 }}
                 onFocus={openSearch}
+                onKeyDown={handleKeyDown}
                 type="text"
                 value={value}
                 placeholder="Search.."
-                className="w-94.75 h-9 border pl-9.5 border-[#E4E4E7] rounded-lg shadow-sm"
+                className="w-94.75 h-9 border pl-9.5 border-[#E4E4E7] dark:border-zinc-700 dark:bg-transparent dark:text-zinc-100 rounded-lg shadow-sm transition-colors duration-500"
               />
             </div>
             {isTyping && <Search value={value} />}
           </div>
         </div>
 
-        <button className="w-9 h-9 p-2 border-[#E4E4E7] border rounded-xl flex items-center justify-center shadow-sm cursor-pointer">
-          <Moon />
-        </button>
+        <ThemeToggle />
       </div>
     </header>
   );

@@ -1,20 +1,21 @@
 "use client";
 
-import { Header } from "../../features/Header";
-import { Footer } from "../../features/Footer";
+import { Header } from "../../features/global/Header";
+import { Footer } from "../../features/global/Footer";
 import { MovieStar } from "../../icons/MovieStar";
 import Image from "next/image";
 import { SeeMoreArrow } from "../../icons/SeeMoreArrow";
 import { MovieTrailerArrow } from "../../icons/MovieTrailerArrow";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import MoreLikeThis from "../../features/MoreLikeThis";
+import MoreLikeThis from "../../features/global/MoreLikeThis";
 import { DetailSkeleton } from "@/app/components/skeletons/DetailSkeleton";
 
 const api_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
 
 export default function Detail() {
+  const [trailerIsPlaying, setTrailerIsPlaying] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const { id } = useParams();
   const router = useRouter();
@@ -28,10 +29,22 @@ export default function Detail() {
   const getMovieDetails = async (movieId) => {
     try {
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}?language=en-US`,
+        `https://api.themoviedb.org/3/movie/${movieId}?language=en-US&append_to_response=release_dates`,
         { headers: { Authorization: `Bearer ${api_token}` } },
       );
-      return await response.json();
+      const data = await response.json();
+
+      const releaseDates = data.release_dates?.results || [];
+      const usRelease = releaseDates.find((item) => item.iso_3166_1 === "US");
+
+      const certification =
+        usRelease?.release_dates?.find((r) => r.certification)?.certification ||
+        "N/A";
+
+      return {
+        ...data,
+        certification,
+      };
     } catch (error) {
       console.error("Movie detail error:", error);
     }
@@ -97,6 +110,12 @@ export default function Detail() {
   if (loading) {
     return <DetailSkeleton />;
   }
+  const formatRuntime = (minutes) => {
+    if (!minutes) return "N/A";
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hours}h ${mins}m`;
+  };
 
   return (
     <div className="flex flex-col items-center min-h-screen relative">
@@ -109,8 +128,9 @@ export default function Detail() {
             <h1 className="text-4xl font-semibold leading-10 tracking-tight">
               {movie?.original_title}
             </h1>
-            <p className="text-lg font-extralight mt-1">
-              {movie?.release_date}
+            <p className="text-[14px] text-[#71717A] font-semibold mt-1">
+              {movie?.release_date.slice(0, 4)} • {movie.certification} •{" "}
+              {formatRuntime(movie.runtime)}
             </p>
           </div>
           <div>
@@ -127,9 +147,7 @@ export default function Detail() {
                     </p>
                     <p className="text-xs text-[#71717A]">/10</p>
                   </div>
-                  <p className="text-[#71717A] text-xs">
-                    {movie?.vote_count}
-                  </p>
+                  <p className="text-[#71717A] text-xs">{movie?.vote_count}</p>
                 </div>
               </div>
             </div>
@@ -162,19 +180,29 @@ export default function Detail() {
                 className="object-cover z-0 brightness-75 transition-all duration-300 ease-out group-hover:scale-110 group-hover:brightness-100"
               />
             )}
+            <div className="absolute z-10 right-6 bottom-6 flex items-center gap-3 text-white">
+              <button
+                onClick={() => setTrailerIsPlaying(true)}
+                className="relative overflow-hidden bg-gradient-to-b from-white/25 to-white/10 hover:from-white/35 hover:to-white/15 backdrop-blur-lg border border-white/30 text-white rounded-full gap-4 w-40 h-16.5 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 shadow-lg shadow-black/30"
+              >
+                <span className="absolute inset-x-0 top-0 h-px bg-white/50" />
+                <MovieTrailerArrow />
+                <span className="font-semibold text-lg select-none">
+                  Play trailer
+                </span>
+              </button>
+            </div>
             <div className="absolute z-10 left-6 bottom-6 flex items-center gap-3 text-white">
               <button
                 onClick={() => setIsPlaying(true)}
-                className="bg-white text-black hover:bg-gray-200 rounded-full w-12 h-12 flex items-center justify-center cursor-pointer transition-transform transform hover:scale-105 shadow-lg"
+                className="relative overflow-hidden bg-gradient-to-b from-white/25 to-white/10 hover:from-white/35 hover:to-white/15 backdrop-blur-lg border border-white/30 text-white rounded-full gap-4 w-40 h-16 flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-105 shadow-lg shadow-black/30"
               >
+                <span className="absolute inset-x-0 top-0 h-px bg-white/50" />
                 <MovieTrailerArrow />
+                <span className="font-semibold text-lg select-none">
+                  Watch now
+                </span>
               </button>
-              <span
-                className="font-semibold text-lg cursor-pointer select-none"
-                onClick={() => setIsPlaying(true)}
-              >
-                Play trailer
-              </span>
             </div>
           </div>
         </div>
@@ -192,6 +220,32 @@ export default function Detail() {
 
             {/* YouTube Iframe */}
             <iframe
+              src={`https://www.vidking.net/embed/movie/${id}`}
+              width="100%"
+              height="580"
+              allowFullScreen
+            >
+              {" "}
+            </iframe>
+          </div>
+          <div
+            className="absolute inset-0 z-[-1]"
+            onClick={() => setIsPlaying(false)}
+          />
+        </div>
+      )}
+      {trailerIsPlaying && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-8 animate-in fade-in duration-200">
+          <div className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+            <button
+              onClick={() => setTrailerIsPlaying(false)}
+              className="absolute top-10 right-4 bg-black/70 hover:bg-black text-white px-3 py-1.5 text-xs rounded-full z-50 cursor-pointer border border-white/20 transition-all flex items-center gap-1"
+            >
+              ✕
+            </button>
+
+            {/* YouTube Iframe */}
+            <iframe
               className="w-full h-full"
               src={`https://www.youtube.com/embed/${youtubeKey}?autoplay=1&rel=0`}
               title="Movie Trailer"
@@ -201,7 +255,7 @@ export default function Detail() {
           </div>
           <div
             className="absolute inset-0 z-[-1]"
-            onClick={() => setIsPlaying(false)}
+            onClick={() => setTrailerIsPlaying(false)}
           />
         </div>
       )}

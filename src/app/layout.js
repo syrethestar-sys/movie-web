@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,8 +19,17 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html>
-      <body className="overflow-auto">{children}</body>
+    <html suppressHydrationWarning>
+      <body className="overflow-auto bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100">
+        <Script
+          id="theme-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

@@ -2,11 +2,11 @@
 import { Suspense, useEffect, useState } from "react";
 import { MovieTitlesFluid } from "../components/MovieTitlesFluid";
 import { MovieCardSkeletonFluid } from "../components/skeletons/MovieCardSkeletonFluid";
-import { Footer } from "../features/Footer";
+import { Footer } from "../features/global/Footer";
 import { MovieTitles } from "../components/MovieTitles";
 import { SeeMoreArrow } from "../icons/SeeMoreArrow";
 import { MovieGridSkeleton } from "../components/skeletons/MovieGridSkeleton";
-import { Header } from "../features/Header";
+import { Header } from "../features/global/Header";
 import { Pagination } from "../components/Pagination";
 import { useSearchParams } from "next/navigation";
 

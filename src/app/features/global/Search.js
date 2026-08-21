@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { GenresButton } from "../components/GenresButton";
+import { GenresButton } from "../../components/GenresButton";
 import { useRouter } from "next/navigation";
-import { SearchMovieTitles } from "../components/SearchMovieTitles";
+import { SearchMovieTitles } from "../../components/SearchMovieTitles";
 
 const api_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
@@ -51,7 +51,7 @@ export const Search = (props) => {
       .catch(() => setErrorMessage("SEARCH API ERROR"));
   }, [searchValue, page]);
 
-  const hasQuery = Boolean(searchValue.trim());
+  const hasQuery = Boolean();
 
   return (
     <div className="animate-dropdown w-[577px] max-w-[calc(100%-2rem)] h-auto absolute bg-white z-30 top-16 left-1/2 -translate-x-1/2 p-4 sm:p-6 box-border flex flex-col justify-between rounded-xl border border-[#E4E4E7] shadow-xl">

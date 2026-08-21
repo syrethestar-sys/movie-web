@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MovieTitles } from "../components/MovieTitles";
-import { SeeMoreArrow } from "../icons/SeeMoreArrow";
+import { MovieTitles } from "../../components/MovieTitles";
+import { SeeMoreArrow } from "../../icons/SeeMoreArrow";
 import { useRouter } from "next/navigation";
-import { Header } from "./Header";
-import { Footer } from "./Footer";
-import { MovieGridSkeleton } from "../components/skeletons/MovieGridSkeleton";
+import { Header } from "../global/Header";
+import { Footer } from "../global/Footer";
+import { MovieGridSkeleton } from "../../components/skeletons/MovieGridSkeleton";
 const api_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
 

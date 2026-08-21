@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { SeeMoreArrow } from "../icons/SeeMoreArrow";
 import { MovieTitles } from "../components/MovieTitles";
-import { Header } from "../features/Header";
-import { Footer } from "../features/Footer";
+import { Header } from "../features/global/Header";
+import { Footer } from "../features/global/Footer";
 import { MovieGridSkeleton } from "../components/skeletons/MovieGridSkeleton";
 import { Pagination } from "../components/Pagination";
 

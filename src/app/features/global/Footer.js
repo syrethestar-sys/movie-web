@@ -1,6 +1,6 @@
-import { LogoWhite } from "../icons/LogoWhite"
-import { EmailIcon } from "../icons/EmailIcon"
-import { PhoneIcon } from "../icons/PhoneIcon"
+import { LogoWhite } from "../../icons/LogoWhite"
+import { EmailIcon } from "../../icons/EmailIcon"
+import { PhoneIcon } from "../../icons/PhoneIcon"
 
 export const Footer = ()=> {
     return (

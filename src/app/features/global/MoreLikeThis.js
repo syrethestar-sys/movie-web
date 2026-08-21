@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MovieTitlesFluid } from "../components/MovieTitlesFluid";
-import { MovieCardSkeletonFluid } from "../components/skeletons/MovieCardSkeletonFluid";
+import { MovieTitlesFluid } from "../../components/MovieTitlesFluid";
+import { MovieCardSkeletonFluid } from "../../components/skeletons/MovieCardSkeletonFluid";
 
 const api_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzY4YWFhNjIyZTM2OGI3Y2ViYjIwY2U5NDRmYzRlNCIsIm5iZiI6MTc4NjY3MDA1NS4wMDEsInN1YiI6IjZhN2U2YmU2MDYwMWRiYzk2OTFjMzE5ZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.7_Jcnn8NgQKKbmYajBFJEUpOrA5mzmI_-wqOkzekQQ4";
